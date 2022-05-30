@@ -52,6 +52,28 @@ And run the code below to upload it to the Colab runtime
 """
 
 
+"""# Step 2: Create samples for classifier
+
+Runs BlazePose on provided images to get target poses for the classifier in a format required by the demo App.
+"""
+
+# Folder with images to use as target poses for classification.
+#
+# Images should repesent terminal states of desired pose classes. I.e. if you
+# want to classify push-up provide iamges for two classes: when hands are up,
+# and when hands are down.
+#
+# Required structure of the images_in_folder:
+#   fitness_poses_images_in/
+#     hands_up/
+#       image_001.jpg
+#       image_002.jpg
+#       ...
+#     hands_down/
+#       image_001.jpg
+#       image_002.jpg
+#       ...
+#     ...
 from mediapipe.python.solutions import pose as mp_pose
 from mediapipe.python.solutions import drawing_utils as mp_drawing
 import tqdm
@@ -61,40 +83,7 @@ import cv2
 import csv
 import io
 import zipfile
-from google.colab import files
 import os
-uploaded = files.upload()
-os.listdir('.')
-
-"""Unzip the archive:"""
-
-
-zf = zipfile.ZipFile(io.BytesIO(uploaded['fitness_poses_images_in.zip']), "r")
-zf.extractall()
-os.listdir('.')
-
-"""# Step 2: Create samples for classifier
-
-Runs BlazePose on provided images to get target poses for the classifier in a format required by the demo App.
-"""
-
-# Folder with images to use as target poses for classification.
-#
-# Images should repesent terminal states of desired pose classes. I.e. if you
-# want to classify push-up provide iamges for two classes: when person is up,
-# and when person is down.
-#
-# Required structure of the images_in_folder:
-#   fitness_poses_images_in/
-#     pushups_up/
-#       image_001.jpg
-#       image_002.jpg
-#       ...
-#     pushups_down/
-#       image_001.jpg
-#       image_002.jpg
-#       ...
-#     ...
 images_in_folder = 'fitness_poses_images_in'
 
 # Output folders for bootstrapped images and CSVs. Image will have a predicted
@@ -181,5 +170,3 @@ For more accurate validation of the predicted Poses use extended Colab provided 
 
 Please check this [guide](https://developers.google.com/ml-kit/vision/pose-detection/classifying-poses#4_integrate_with_the_ml_kit_quickstart_app) on how to use this CSV in the ML Kit sample app.
 """
-
-files.download(csv_out_path)
